@@ -11,10 +11,8 @@ library(shiny)
 library(tidyverse)
 library(rtweet)
 
-#tweet_df <- search_tweets("#olympics", n = 1600, include_rts = FALSE)
-
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-    titlePanel(title=h4("Races", align="center")),
+    titlePanel(title=h4("Olympic Twitter Data", align="center")),
     mainPanel(plotOutput("plot")))
 )
