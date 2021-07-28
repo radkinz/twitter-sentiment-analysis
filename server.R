@@ -13,10 +13,10 @@ library(tidyr)
 library(tidytext)
 library(rtweet)
 
-prepare_data <- function(search) {
+prepare_data <- function(search, n) {
     #get tweets
     twitterdata <- search_tweets(
-        search, n = 500, include_rts = FALSE
+        search, n = n, include_rts = FALSE
     )
     twitterdata
     
@@ -45,7 +45,7 @@ prepare_data <- function(search) {
 }
 
 plot_top_10 <- function(search) {
-    list_data <- prepare_data(search)
+    list_data <- prepare_data(search, 500)
     data <- list_data[[1]]
     
     #begin constructing top 10 most frequent word plots
@@ -99,7 +99,7 @@ sentiment_bing = function(twt){
 
 
 sentiment_function <- function(search) {
-    list_data <- prepare_data(search)
+    list_data <- prepare_data(search, 100)
     data <- list_data[[1]]
     original_data <- list_data[[2]]
     
@@ -110,12 +110,12 @@ sentiment_function <- function(search) {
     #use tidytext to get sentiment data
     twitter_sentiment = bind_rows(
         tibble(
-            name = "#Olympics",
+            name = search,
             score = unlist(map(data_sent, 'score')),
             type = unlist(map(data_sent, 'type'))
         )
     )
-    twitter_sentiment
+    
     #use ggplot to graph sentiments
     ggplot(twitter_sentiment, aes(x=score, fill=name)) +
         geom_histogram(bins = 15, alpha = 0.6) +
@@ -126,8 +126,11 @@ sentiment_function <- function(search) {
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-    output$plot<-renderPlot({
+    output$plotFreq<-renderPlot({
+        plot_top_10("#olympics")
+    })
+    
+    output$plotSent<-renderPlot({
         sentiment_function("#olympics")
     })
-
 })
