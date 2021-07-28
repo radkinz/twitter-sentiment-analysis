@@ -126,6 +126,22 @@ sentiment_function <- function(search) {
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
+    query <- eventReactive(input$submit,
+                           {
+                               input$searchquery
+                           })
+    
+    observeEvent(input$submit, {
+        print(query()[[1]])
+        output$plotFreq<-renderPlot({
+            plot_top_10(query()[[1]])
+        })
+        
+        output$plotSent<-renderPlot({
+            sentiment_function(query()[[1]])
+        })
+    })
+    
     output$plotFreq<-renderPlot({
         plot_top_10("#olympics")
     })
