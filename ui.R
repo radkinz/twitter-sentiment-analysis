@@ -14,7 +14,12 @@ library(shinycustomloader)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-    titlePanel(title=h4("Olympic Twitter Data", align="center")),
+    titlePanel(title=h4("Analyze Twitter Data", align="center")),
+    
+    sidebarPanel(
+      textInput("searchquery", "Twitter Search Query: ", placeholder="#olympics"),
+      actionButton("submit", "Go!")
+    ),
 
     mainPanel(
       tabsetPanel(
