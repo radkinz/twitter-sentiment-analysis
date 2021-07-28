@@ -42,19 +42,6 @@ cleaned_tweets.twitterdata %>%
        y = "Common Words",
        title = "Top 10 Used Words in #Olympics tweets")
 
-cleaned_tweets.Country2 %>%
-  count(word, sort=TRUE) %>%
-  top_n(10) %>%
-  mutate(word = reorder(word, n)) %>%
-  ggplot(aes(x = word, y = n)) +
-  geom_col() +
-  xlab(NULL) +
-  coord_flip() +
-  theme_bw() +
-  labs(x = "Frequency",
-       y = "Common Words",
-       title = "Top 10 Used Words in #USA tweets")
-
 #set up sentiment function
 sentiment_bing = function(twt){
   #clean tweet
@@ -92,16 +79,16 @@ twitterdata_sent = lapply(twitterdata$text, function(x){sentiment_bing(x)})
 twitterdata_sent
 
 #use tidytext to get sentiment data
-country_sentiment = bind_rows(
+twitter_sentiment = bind_rows(
   tibble(
     name = "#Olympics",
     score = unlist(map(twitterdata_sent, 'score')),
     type = unlist(map(twitterdata_sent, 'type'))
   )
 )
-country_sentiment
+twitter_sentiment
 #use ggplot to graph sentiments
-ggplot(country_sentiment, aes(x=score, fill=name)) +
+ggplot(twitter_sentiment, aes(x=score, fill=name)) +
   geom_histogram(bins = 15, alpha = 0.6) +
   theme_bw()
   
