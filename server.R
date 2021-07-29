@@ -45,7 +45,7 @@ prepare_data <- function(search, n) {
 }
 
 plot_top_10 <- function(search) {
-    list_data <- prepare_data(search, 500)
+    list_data <- prepare_data(search, 1600)
     data <- list_data[[1]]
     
     #begin constructing top 10 most frequent word plots
@@ -53,14 +53,19 @@ plot_top_10 <- function(search) {
         count(word, sort=TRUE) %>%
         top_n(10) %>%
         mutate(word = reorder(word, n)) %>%
-        ggplot(aes(x = word, y = n, fill=word)) +
+        filter(n < 1580) %>%
+        ggplot(aes(x = word, y = n, fill=n)) +
+        scale_fill_gradient(low="blue", high="red") +
         geom_col() +
         xlab(NULL) +
         coord_flip() +
         theme_bw() +
-        labs(x = "Frequency",
-             y = "Common Words",
-             title = "Top 10 Used Words in #Olympics tweets")
+        labs(x = "Common Words",
+             y = "Frequency",
+             title = sprintf("Top 10 Words in %s Tweets", search)) +
+        theme(plot.title = element_text(size = 20, face = "bold"),
+              axis.title.x = element_text(size = 13),
+              axis.title.y = element_text(size = 13)) 
 }
 
 #set up sentiment function
@@ -99,7 +104,7 @@ sentiment_bing = function(twt){
 
 
 sentiment_function <- function(search) {
-    list_data <- prepare_data(search, 100)
+    list_data <- prepare_data(search, 70)
     data <- list_data[[1]]
     original_data <- list_data[[2]]
     
@@ -117,9 +122,18 @@ sentiment_function <- function(search) {
     )
     
     #use ggplot to graph sentiments
-    ggplot(twitter_sentiment, aes(x=score, fill=name)) +
-        geom_histogram(bins = 15, alpha = 0.6) +
-        theme_bw()
+    ggplot(twitter_sentiment, aes(x=score, fill=..density..)) +
+        geom_histogram(binwidth=1) +
+        scale_fill_gradient(low="blue", high="purple") +
+        theme_bw() +
+        labs(x = "Sentiment Score",
+           y = "Frequency",
+           title = sprintf("Sentiment Score among %s Tweets", search),
+           subtitle= "The higher the sentiment, the more positive the tweet") +
+        theme(plot.title = element_text(size = 20, face = "bold"),
+            plot.subtitle = element_text(size = 15, face = "italic"),
+            axis.title.x = element_text(size = 13),
+            axis.title.y = element_text(size = 13)) 
     
 }
 
