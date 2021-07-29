@@ -23,7 +23,7 @@ shinyUI(fluidPage(
 
     mainPanel(
       tabsetPanel(
-        tabPanel("Sentiment", withLoader(plotOutput("plotSent"), type="image", loader="https://cdn.dribbble.com/users/908372/screenshots/4812323/loading2.gif")),
+        tabPanel("Sentiment Analysis", withLoader(plotOutput("plotSent"), type="image", loader="https://cdn.dribbble.com/users/908372/screenshots/4812323/loading2.gif")),
         tabPanel("Frequency", withLoader(plotOutput("plotFreq"), type="image", loader="https://thumbs.gfycat.com/YellowishElementaryHind-max-1mb.gif"))
       )
     ))
