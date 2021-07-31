@@ -17,7 +17,9 @@ shinyUI(fluidPage(
     titlePanel(title=h4("Analyze Twitter Data", align="center")),
     
     sidebarPanel(
-      textInput("searchquery", "Twitter Search Query: ", placeholder="#olympics"),
+      textInput("searchquery", "Twitter Search Query: ", value="#olympics"),
+      numericInput("sentimentN", "Tweet Sample Size for Sentiment Analysis: ", value=70, min=0, max=1600),
+      numericInput("freqN", "Tweet Sample Size for Frequency Analysis: ", value=1200, min=0, max=1600),
       actionButton("submit", "Go!")
     ),
 
