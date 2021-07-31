@@ -44,8 +44,9 @@ prepare_data <- function(search, n) {
     return(result)
 }
 
-plot_top_10 <- function(search) {
-    list_data <- prepare_data(search, 1600)
+plot_top_10 <- function(search, n) {
+    list_data <- prepare_data(search, n)
+    Totallength <- n
     data <- list_data[[1]]
     
     #begin constructing top 10 most frequent word plots
@@ -53,7 +54,7 @@ plot_top_10 <- function(search) {
         count(word, sort=TRUE) %>%
         top_n(10) %>%
         mutate(word = reorder(word, n)) %>%
-        filter(n < 1580) %>%
+        filter(n < (Totallength-20)) %>%
         ggplot(aes(x = word, y = n, fill=n)) +
         scale_fill_gradient(low="blue", high="red") +
         geom_col() +
@@ -62,8 +63,10 @@ plot_top_10 <- function(search) {
         theme_bw() +
         labs(x = "Common Words",
              y = "Frequency",
+             subtitle = sprintf("Not Including %s itself...", search),
              title = sprintf("Top 10 Words in %s Tweets", search)) +
         theme(plot.title = element_text(size = 20, face = "bold"),
+              plot.subtitle = element_text(size = 15, face = "italic"),
               axis.title.x = element_text(size = 13),
               axis.title.y = element_text(size = 13)) 
 }
@@ -103,8 +106,8 @@ sentiment_bing = function(twt){
 }
 
 
-sentiment_function <- function(search) {
-    list_data <- prepare_data(search, 70)
+sentiment_function <- function(search, n) {
+    list_data <- prepare_data(search, n)
     data <- list_data[[1]]
     original_data <- list_data[[2]]
     
@@ -142,25 +145,41 @@ sentiment_function <- function(search) {
 shinyServer(function(input, output) {
     query <- eventReactive(input$submit,
                            {
+                             #query validation
+                             if (input$searchquery != "") {
                                input$searchquery
+                             }
                            })
     
+    sentimentN <- eventReactive(input$submit,
+                                {
+                                  if (input$sentimentN != "") {
+                                    input$sentimentN
+                                  }
+                                })
+    
+    freqN <- eventReactive(input$submit,
+                                {
+                                  if (input$freqN != "") {
+                                    input$freqN
+                                  }
+                                })
+    
     observeEvent(input$submit, {
-        print(query()[[1]])
         output$plotFreq<-renderPlot({
-            plot_top_10(query()[[1]])
+            plot_top_10(query()[[1]], freqN()[[1]])
         })
         
         output$plotSent<-renderPlot({
-            sentiment_function(query()[[1]])
+            sentiment_function(query()[[1]], sentimentN()[[1]])
         })
     })
     
     output$plotFreq<-renderPlot({
-        plot_top_10("#olympics")
+        plot_top_10("#olympics", 1200)
     })
     
     output$plotSent<-renderPlot({
-        sentiment_function("#olympics")
+        sentiment_function("#olympics", 70)
     })
 })
