@@ -146,23 +146,23 @@ shinyServer(function(input, output) {
     query <- eventReactive(input$submit,
                            {
                              #query validation
-                             if (input$searchquery != "") {
-                               input$searchquery
-                             }
+                             validate(
+                               need(input$searchquery != "", "Please fill out the search query")
+                             )
                            })
     
     sentimentN <- eventReactive(input$submit,
                                 {
-                                  if (input$sentimentN != "") {
-                                    input$sentimentN
-                                  }
+                                  validate(
+                                    need(input$sentimentN != "", "Please fill out the sentiment analysis sample size")
+                                  )
                                 })
     
     freqN <- eventReactive(input$submit,
                                 {
-                                  if (input$freqN != "") {
-                                    input$freqN
-                                  }
+                                  validate(
+                                    need(input$freqN != "", "Please fill out the frequency analysis sample size")
+                                  )
                                 })
     
     observeEvent(input$submit, {
