@@ -14,12 +14,33 @@ library(shinycustomloader)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-    titlePanel(title=h4("Analyze Twitter Data", align="center")),
+  tags$head(
+    # Note the wrapping of the string in HTML()
+    tags$style(HTML("
+      @import url('https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap');
+      body {
+        background-color: #141d26;
+        color: white;
+      }
+      h2 {
+        font-family: 'Yusei Magic', sans-serif;
+      }
+      .shiny-input-container {
+        color: #474747;
+      }
+      .tab-content {
+        background-color: white;
+      }
+      .tabbable > .nav > li > a {background-color: #243447}
+      .tabbable > .nav > li > a:hover {background-color: white}
+      .tabbable > .nav > .active > a {background-color: white}"))
+  ),
+    titlePanel(title=h2("Twitter Data Analysis", align="center")),
     
     sidebarPanel(
       textInput("searchquery", "Twitter Search Query: ", value="#olympics"),
-      numericInput("sentimentN", "Tweet Sample Size for Sentiment Analysis: ", value=70, min=0, max=1600),
-      numericInput("freqN", "Tweet Sample Size for Frequency Analysis: ", value=1200, min=0, max=1600),
+      sliderInput("sentimentN", "Tweet Sample Size for Sentiment Analysis: ", value=70, min=0, max=1600),
+      sliderInput("freqN", "Tweet Sample Size for Frequency Analysis: ", value=1200, min=0, max=1600),
       actionButton("submit", "Go!")
     ),
 
