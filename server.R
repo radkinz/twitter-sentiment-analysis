@@ -13,12 +13,22 @@ library(tidyr)
 library(tidytext)
 library(rtweet)
 
-prepare_data <- function(search, n) {
+rate_limit_exceed <- FALSE
+
+prepare_data <- function(search, size) {
     #get tweets
+    print(search)
+    print(size)
     twitterdata <- search_tweets(
-        search, n = n, include_rts = FALSE
+        search, n = size, include_rts = FALSE
     )
-    twitterdata
+    #if no data then rate exceeded
+    if (nrow(twitterdata) == 0) {
+        showNotification("Rtweet Rate limit exceeded. 
+                         Come back in 15 minutes:/",
+                         type = "warning"
+        )
+    }
     
     #simplify dataset
     tweets.twitterdata = twitterdata %>% select(screen_name, text)
@@ -52,9 +62,9 @@ plot_top_10 <- function(search, n) {
     #begin constructing top 10 most frequent word plots
     data %>%
         count(word, sort=TRUE) %>%
-        top_n(10) %>%
+        #exclude #1 most common word because that will be the key word
+        slice(2:11) %>%
         mutate(word = reorder(word, n)) %>%
-        filter(n < (Totallength-20)) %>%
         ggplot(aes(x = word, y = n, fill=n)) +
         scale_fill_gradient(low="blue", high="red") +
         geom_col() +
@@ -63,7 +73,7 @@ plot_top_10 <- function(search, n) {
         theme_bw() +
         labs(x = "Common Words",
              y = "Frequency",
-             subtitle = sprintf("Not Including %s itself...", search),
+             subtitle = sprintf('Not Including "%s" itself...', search),
              title = sprintf("Top 10 Words in %s Tweets", search)) +
         theme(plot.title = element_text(size = 20, face = "bold"),
               plot.subtitle = element_text(size = 15, face = "italic"),
@@ -112,7 +122,7 @@ sentiment_function <- function(search, n) {
     original_data <- list_data[[2]]
     
     #apply function to dataset
-    data_sent = lapply( original_data$text, function(x){sentiment_bing(x)})
+    data_sent = lapply(original_data$text, function(x){sentiment_bing(x)})
     data_sent
     
     #use tidytext to get sentiment data
@@ -149,28 +159,27 @@ shinyServer(function(input, output) {
                              validate(
                                need(input$searchquery != "", "Please fill out the search query")
                              )
+                               input$searchquery
                            })
     
     sentimentN <- eventReactive(input$submit,
                                 {
-                                  validate(
-                                    need(input$sentimentN != "", "Please fill out the sentiment analysis sample size")
-                                  )
+                                    input$sentimentN
                                 })
     
     freqN <- eventReactive(input$submit,
                                 {
-                                  validate(
-                                    need(input$freqN != "", "Please fill out the frequency analysis sample size")
-                                  )
+                                    input$freqN
                                 })
     
     observeEvent(input$submit, {
         output$plotFreq<-renderPlot({
-            plot_top_10(query()[[1]], freqN()[[1]])
+            print(plot_top_10(query()[[1]], freqN()[[1]]))
         })
         
         output$plotSent<-renderPlot({
+            print(sentimentN()[[1]])
+            print(query()[[1]])
             sentiment_function(query()[[1]], sentimentN()[[1]])
         })
     })
