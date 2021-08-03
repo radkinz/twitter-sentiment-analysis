@@ -33,7 +33,15 @@ shinyUI(fluidPage(
       }
       .tabbable > .nav > li > a {background-color: #243447}
       .tabbable > .nav > li > a:hover {background-color: white}
-      .tabbable > .nav > .active > a {background-color: white}"))
+      .tabbable > .nav > .active > a {background-color: white}
+      .shiny-notification {
+        position:fixed;
+        top: calc(25%);
+        left: calc(50%);
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        font-size: 120%;
+      }"))
   ),
     titlePanel(title=h2("Twitter Data Analysis", align="center")),
     
