@@ -15,8 +15,8 @@ Using the Bing lexicon and `get_sentiments` function from the [tidytext package]
 Usig the `count` and `top_n` functions from the [dplyr package](https://dplyr.tidyverse.org/), we can filter and sort the top 10 most common words that are found in our sample size of tweets. We then display our results using `ggplot2` once again to get an easy-to-read bar graph that lists the top 10 words and their frequencies. Ultimately, this data helps us find out what types of words are often associated with the words that the user inputs. 
 
 ## Overall UI Layout
-
-TBD
+![Page UI](/images/uiscreenshot.png)
+The overall UI of the web app is simply composed of a header, sidebar, and tabset panel. The sidebar takes in 3 inputs for the tweet search query, the sentiment analysis tweet sample size, and the frequency analysis tweet sample size. Meanwhile, the tabset panel lets the user alternate between the sentiment and frequency plot. The color scheme is also based on that of twitter's dark mode, which is fun. 
 
 ## Final Thoughts
 Working with R was very eye-opening because I started to see the line between computer and data science. As simple as data science might seem as just "handling data," I learned that a lot goes into the process of getting the data, cleaning/organizing the data, and displaying the data in the most effective way for the user. The R language is designed for data science, so I was not surprised when I found countless resources and libraries to help manage and plot data. This abundance and partial *reliance* on libraries to help me achieve certain functions at first made me feel useless and sort of like I was cheating. However, I started to realize the epicness of taking multiple open-source R packages and combining them to create one awesome project of its own (like Neapolitan ice cream). In the end, I still see myself on the computer science side of the fence, but it felt really good to branch out:)
