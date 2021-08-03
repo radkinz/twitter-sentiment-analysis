@@ -12,7 +12,6 @@ library(tidyverse)
 library(rtweet)
 library(shinycustomloader)
 
-# Define UI for application that draws a histogram
 shinyUI(fluidPage(
   tags$head(
     # Note the wrapping of the string in HTML()
@@ -47,8 +46,8 @@ shinyUI(fluidPage(
     
     sidebarPanel(
       textInput("searchquery", "Twitter Search Query: ", value="#olympics"),
-      sliderInput("sentimentN", "Tweet Sample Size for Sentiment Analysis: ", value=70, min=0, max=1600),
-      sliderInput("freqN", "Tweet Sample Size for Frequency Analysis: ", value=1200, min=0, max=1600),
+      sliderInput("sentimentN", "Tweet Sample Size for Sentiment Analysis: ", value=70, min=1, max=1600),
+      sliderInput("freqN", "Tweet Sample Size for Frequency Analysis: ", value=1200, min=1, max=1600),
       actionButton("submit", "Go!")
     ),
 
