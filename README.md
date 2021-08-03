@@ -12,7 +12,7 @@ Using the Bing lexicon and `get_sentiments` function from the [tidytext package]
 
 ## Frequency Analysis
 ![Frequency Graph](/images/freqsecreenshot.png)
-Usig the `count` and `top_n` functions from the [dplyr package](https://dplyr.tidyverse.org/), we can filter and sort the top 10 most common words that are found in our sample size of tweets. We then display our results using `ggplot2` once again to get an easy-to-read bar graph that lists the top 10 words and their frequencies. Ultimately, this data helps us find out what types of words are often associated with the words that the user inputs. 
+Usig the `count` and `slice` functions from the [dplyr package](https://dplyr.tidyverse.org/), we can filter and sort the top 10 most common words that are found in our sample size of tweets. We then display our results using `ggplot2` once again to get an easy-to-read bar graph that lists the top 10 words and their frequencies. Ultimately, this data helps us find out what types of words are often associated with the words that the user inputs. 
 
 ## Overall UI Layout
 ![Page UI](/images/uiscreenshot.png)
