@@ -13,12 +13,8 @@ library(tidyr)
 library(tidytext)
 library(rtweet)
 
-rate_limit_exceed <- FALSE
-
 prepare_data <- function(search, size) {
     #get tweets
-    print(search)
-    print(size)
     twitterdata <- search_tweets(
         search, n = size, include_rts = FALSE
     )
@@ -74,7 +70,7 @@ plot_top_10 <- function(search, n) {
         labs(x = "Common Words",
              y = "Frequency",
              subtitle = sprintf('Not Including "%s" itself...', search),
-             title = sprintf("Top 10 Words in %s Tweets", search)) +
+             title = sprintf('Top 10 Words in "%s" Tweets', search)) +
         theme(plot.title = element_text(size = 20, face = "bold"),
               plot.subtitle = element_text(size = 15, face = "italic"),
               axis.title.x = element_text(size = 13),
@@ -174,12 +170,10 @@ shinyServer(function(input, output) {
     
     observeEvent(input$submit, {
         output$plotFreq<-renderPlot({
-            print(plot_top_10(query()[[1]], freqN()[[1]]))
+            plot_top_10(query()[[1]], freqN()[[1]])
         })
         
         output$plotSent<-renderPlot({
-            print(sentimentN()[[1]])
-            print(query()[[1]])
             sentiment_function(query()[[1]], sentimentN()[[1]])
         })
     })
